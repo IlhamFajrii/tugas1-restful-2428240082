@@ -67,4 +67,3 @@ GET /insurance-policies?jenis=kesehatan
 ## Deployment
 
 URL Vercel:
-ISI_SETELAH_DEPLOY
