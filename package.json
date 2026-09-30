@@ -20,5 +20,8 @@
   "homepage": "https://github.com/IlhamFajrii/tugas1-restful-2428240082#readme",
   "dependencies": {
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
