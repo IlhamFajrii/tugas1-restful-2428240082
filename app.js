@@ -213,7 +213,38 @@ app.delete("/insurance-policies/:id", (req, res) => {
   });
 });
 
+// ==========================================
+// FILTER
+// GET /insurance-policies?jenis=kesehatan
+// ==========================================
 
+app.get("/insurance-policies", (req, res) => {
+  const { jenis } = req.query;
+
+  // Jika tidak menggunakan filter
+  if (!jenis) {
+    return res.json(insurancePolicies);
+  }
+
+  // Filter berdasarkan jenis
+  const hasil = insurancePolicies.filter(
+    (item) => item.jenis === jenis
+  );
+
+  res.json(hasil);
+});
+
+// ==========================================
+// CATCH-ALL 404
+// ==========================================
+
+app.use((req, res) => {
+  res.status(404).json({
+    status: "error",
+    message: "Endpoint tidak ditemukan",
+    data: null,
+  });
+});
 // ==================================================
 // Menjalankan server
 // ==================================================
