@@ -66,4 +66,4 @@ GET /insurance-policies?jenis=kesehatan
 
 ## Deployment
 
-URL Vercel:
+URL Vercel:https://tugas1-restful-2428240082.vercel.app
