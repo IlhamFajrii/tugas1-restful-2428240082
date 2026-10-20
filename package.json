@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-"scripts": {
-  "start": "node app.js",
-  "dev": "nodemon app.js"
-},
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IlhamFajrii/tugas1-restful-2428240082.git"
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/IlhamFajrii/tugas1-restful-2428240082#readme",
   "dependencies": {
+    "dotenv": "^18.0.8",
     "express": "^5.2.1"
   },
   "devDependencies": {
