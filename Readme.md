@@ -1,69 +1,73 @@
-# Tugas 1 RESTful API - Asuransi
-
-## Identitas
-
-Nama: Muhammad Ilham Fajri
-NIM: ISI_NIM
-Kelas: SI5B
-Nomor Topik: 20
-Topik: Asuransi
-Resource: Polis
-
-## Deskripsi
-
-RESTful API untuk mengelola data polis asuransi
-menggunakan Node.js dan Express.js.
+# Tugas RESTful API Asuransi
 
 ## Teknologi
-
-- Node.js
-- Express.js
-- Nodemon
+- Node.js + Express
+- MongoDB + Mongoose
 - Postman
-- Vercel
 
-## Menjalankan Project
+## Menjalankan secara lokal
+1. Pastikan Node.js dan MongoDB sudah terpasang dan service MongoDB berjalan.
+2. Jalankan `npm install`.
+3. Salin `.env.example` menjadi `.env`, lalu atur `API_KEY` dan `MONGODB_URI`.
+4. Jalankan `npm run dev`.
+5. Buka `http://localhost:3000/`.
 
-Install dependency:
-
-npm install
-
-Menjalankan server:
-
-npm start
-
-Mode development:
-
-npm run dev
-
-Server berjalan pada:
-
-http://localhost:3000
+## Struktur data
+- `Customer` adalah schema nasabah.
+- `InsurancePolicy.customer` menggunakan referencing (`ObjectId` + `ref: "Customer"`).
+- `InsurancePolicy.pertanggungan` menggunakan embedding: detail pertanggungan disimpan di dalam dokumen polis.
+- `populate("customer", ...)` mengambil detail nasabah yang direferensikan.
 
 ## Endpoint
+- `GET /insurance-policies` - daftar polis dengan filter, pagination, sorting, projection, dan populate nasabah
+- `GET /insurance-policies/:id` - detail polis
+- `POST /insurance-policies` - tambah polis (API key)
+- `PUT /insurance-policies/:id` - ubah polis (API key)
+- `DELETE /insurance-policies/:id` - hapus polis (API key)
+- `GET /customers` - daftar nasabah
+- `POST /customers` - tambah nasabah (API key)
 
-GET /insurance-policies
-
-GET /insurance-policies/:id
-
-POST /insurance-policies
-
-PUT /insurance-policies/:id
-
-DELETE /insurance-policies/:id
-
-GET /insurance-policies?jenis=kesehatan
-
-## Filter
-
-Parameter filter:
-
-jenis
+## Query parameter daftar polis
+- Filtering: `jenis`, `namaPemegang`, `customerId`, `minPremi`, `maxPremi`
+- Pagination: `page`, `limit` (maksimal 100)
+- Sorting: `sortBy` (`nomorPolis`, `jenis`, `premiBulanan`, `tanggalMulai`, `createdAt`, `updatedAt`), `order=asc|desc`
+- Projection: `fields=nomorPolis,jenis,premiBulanan`
 
 Contoh:
+`GET /insurance-policies?jenis=kesehatan&minPremi=100000&maxPremi=500000&page=1&limit=5&sortBy=premiBulanan&order=desc&fields=nomorPolis,jenis,premiBulanan,customer,pertanggungan`
 
-GET /insurance-policies?jenis=kesehatan
+Header untuk POST/PUT/DELETE:
+`x-api-key: nilai_API_KEY_di_file_env`
 
-## Deployment
+## Contoh body membuat nasabah
+```json
+{
+  "nama": "Andi Wijaya",
+  "email": "andi@example.com",
+  "nomorTelepon": "081234567890",
+  "alamat": "Palembang"
+}
+```
 
-URL Vercel:https://tugas1-restful-2428240082.vercel.app
+## Contoh body membuat polis dengan referencing
+```json
+{
+  "nomorPolis": "POL-2026-0187",
+  "customerId": "ID_CUSTOMER_DARI_RESPONS_POST_CUSTOMERS",
+  "jenis": "kesehatan",
+  "premiBulanan": 350000,
+  "tanggalMulai": "2026-01-01",
+  "pertanggungan": [
+    {
+      "nama": "Rawat Inap",
+      "batasManfaat": 50000000,
+      "keterangan": "Maksimal sesuai ketentuan polis"
+    }
+  ]
+}
+```
+
+Alternatif, saat membuat polis bisa mengirim `namaPemegang` dan `emailPemegang`; API akan mencari nasabah berdasarkan email dan membuatnya bila belum ada.
+
+## Catatan
+Data awal sebelumnya disimpan di array JavaScript. Versi ini menggunakan MongoDB, sehingga data lama dalam array tidak otomatis dipindahkan. Buat data nasabah lalu polis lewat Postman setelah koneksi database aktif.
